@@ -1,0 +1,88 @@
+<DOCTYPE !html>
+<html ng-app="BasketApp">
+  <head>
+    <title>My collection of drinks
+    </title>
+    <meta charset="UTF-8">
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  </head>
+
+  <body>
+    <div class="heading">
+      <h1>
+        <span class="glyphicon glyphicon-star-empty"></span>
+        My collection of drinks
+        <span class="glyphicon glyphicon-star-empty"></span>
+      </h1>
+    </div>
+    <div class="container" ng-controller="MainController">
+      <div class="main">
+        <ul class="list-group">
+          <!-- external ng repeat to cycle through each type of drinks -->
+          <li ng-repeat="(drinkCategory, categoryData) in drinks" class="list-group-item drink-category">
+            <a href="#drink-category-{{$index}}" data-toggle="collapse">
+              <h2> {{ drinkCategory }} </h2>
+            </a>
+            <div id="drink-category-{{$index}}" class="collapse">
+              <ul class="list-group">
+              <!-- internal ng-repeat cycles through each item in wines, whiskeys etc.-->
+              <li ng-repeat="item in categoryData track by $index" class="list-group-item drinks-list-item">
+                <!-- Our drinks array is two-dimensional and has two indices -->
+                <!-- $parent.$index (drink[$parent.$index]=wines,whiskeys etc.) -->
+                <!-- and $index (item[$index]=wine1,wine2 etc.) -->
+                <!-- For collapsible element withing ng-repeat we use -->
+                <!-- complex index {{$parent.$index}}-{{$index}} to access -->
+                <!-- specific element of drinks array -->
+                <a href="#item-info-{{$parent.$index}}-{{$index}}" data-toggle="collapse">
+                  <strong>{{ item.brand | uppercase}}</strong> {{ item.name }}
+                  {{ item.vintage }}
+                </a>
+                <div id="item-info-{{$parent.$index}}-{{$index}}" class="collapse">
+                  <div class="country">
+                    <span class="glyphicon glyphicon-globe"></span>
+                    <strong>Country:</strong> {{ item.country }}
+                  </div>
+                  <div class="region">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                    <strong>Region:</strong> {{ item.region }}
+                  </div>
+                  <div class="price">
+                    <span class="glyphicon glyphicon-usd"></span>
+                    <strong>Price:</strong> {{ item.price | currency }}
+                  </div>
+                  <div class="price">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                    <strong>Rating:</strong> {{ item.score }}
+                  </div>
+                </div>
+              </li>
+            </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="basket">
+      <span class="glyphicon glyphicon-trash basket-icon"></span>
+    </div>
+
+    <!-- Modules -->
+    <script src="js/app.js"></script>
+
+    <!-- Controllers -->
+    <script src="js/controllers/MainController.js"></script>
+
+    <!-- Services -->
+
+  </body>
+</html>
