@@ -1,3 +1,11 @@
+* { /* to disable selection of text that can be dragged later */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
 html, body {
   background: url('background.png');
   background-size: 280px auto;
@@ -7,6 +15,19 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+div.basket.lvl-over {
+    border: 2px dotted rgba(29, 18, 15, 0.6) !important;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+.lvl-target {
+    opacity: 0.5;
+  }
+
+[draggable] {
+    cursor: move;
+  }
 
 .heading {
   background-color: rgba(255, 255, 255, 0.2);
@@ -42,18 +63,79 @@ html, body {
   position: fixed;
   bottom: 50px;
   right: 50px;
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   background-color: rgba(97, 75, 48, 0.6);
-  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
   color: rgba(255, 255, 255, 0.2);
-  border-radius: 3%;
+  border-radius: 3px;
   text-align: center;
+  z-index: 2;
+}
+
+.basket-collapse {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none !important;
+  color: rgba(97, 75, 48, 0.8);
+}
+
+.basket-collapse span {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .basket-icon {
-  margin-top: 25px;
-  font-size: 50px;
+  margin-top: 5px;
+  font-size: 40px;
+}
+
+.last-in-basket {
+  font-size: 10px;
+  overflow: hidden;
+}
+
+.no-transition {
+  -webkit-transition: height 0.01s;
+  -moz-transition: height 0.01s;
+  -ms-transition: height 0.01s;
+  -o-transition: height 0.01s;
+  transition: height 0.01s;
+}
+
+.basket-expanded {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  width: 90%;
+  height: 80%;
+  background-color: rgba(97, 75, 48, 0.7);
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);;
+  color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  text-align: center;
+  z-index: 1;
+}
+
+.basket-expanded-icon {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: rgba(97, 75, 48, 0.8);
+  padding: 2%;
+  margin: 0 0 20px 0;
+}
+
+.basket-arrow {
+  text-align: left;
+  padding: 0;
+}
+
+.basket-arrow span {
+  margin: 0;
+  padding: 0;
+  font-size: 1.8em;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .drink-category {
@@ -93,6 +175,34 @@ html, body {
 
 .drinks-list-item a:hover {
   opacity: 0.6;
+}
+
+.drinks-list-item-inbasket {
+  background-color: rgba(97, 75, 48, 0.8);
+  color: rgba(255, 255, 255, 0.6);
+  margin: 7px 2% 7px 2%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0 !important;
+  text-align: left;
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+}
+
+.item-restore {
+  border: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+}
+
+.item-restore:hover, .item-restore:focus, .item-restore:active, .item-restore.active, .item-restore:active:focus {
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 0;
 }
 
 .country {

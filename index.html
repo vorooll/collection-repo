@@ -4,6 +4,16 @@
     <title>My collection of drinks
     </title>
     <meta charset="UTF-8">
+
+    <script src="js/mobile-drag-drop/index.min.js"></script>
+    <script src="js/mobile-drag-drop/scroll-behaviour.min.js"></script>
+    <script>
+      // options are optional ;)
+      MobileDragDrop.polyfill({
+        // use this to make use of the scroll behaviour
+        dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
+      });
+    </script>
     <script
     src="https://code.jquery.com/jquery-3.2.1.min.js"
     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -11,10 +21,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="js/mobile-drag-drop/default.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
   </head>
+
+  <!-- TODO 1: in the end check the libraries and dependencies and remove unnecesarry ones -->
+  <!-- TODO 2: Separate main view and basket into different views and use ng-view -->
+  <!-- TODO 3: Find out the way to pass to lvlDragAndDrop directive what is passed now via ng-click (send item to basket) -->
+  <!-- TODO 4: Figure out and implement API calls to verify and submit a basket -->
+  <!-- TODO 5: Figure out how to restore item to the same place (index) within an array it was deleted from -->
+  <!-- TODO 6: Make some comments to the code -->
 
   <body>
     <div class="heading">
@@ -24,7 +42,8 @@
         <span class="glyphicon glyphicon-star-empty"></span>
       </h1>
     </div>
-    <div class="container" ng-controller="MainController">
+    <div class="container" id="main-container" ng-controller="MainController">
+
       <div class="main">
         <ul class="list-group">
           <!-- external ng repeat to cycle through each type of drinks -->
@@ -42,7 +61,8 @@
                 <!-- For collapsible element withing ng-repeat we use -->
                 <!-- complex index {{$parent.$index}}-{{$index}} to access -->
                 <!-- specific element of drinks array -->
-                <a href="#item-info-{{$parent.$index}}-{{$index}}" data-toggle="collapse">
+                <!-- <div> for draggable -->
+                <a href="#item-info-{{$parent.$index}}-{{$index}}" data-toggle="collapse" lvl-draggable="true">
                   <strong>{{ item.brand | uppercase}}</strong> {{ item.name }}
                   {{ item.vintage }}
                 </a>
@@ -64,6 +84,7 @@
                     <strong>Rating:</strong> {{ item.score }}
                   </div>
                 </div>
+              <!-- </div>  for draggable -->
               </li>
             </ul>
             </div>
@@ -72,17 +93,66 @@
       </div>
     </div>
 
-    <div class="basket">
-      <span class="glyphicon glyphicon-trash basket-icon"></span>
+    <div ng-controller="BasketController">
+      <a href="#expand-basket" data-toggle="collapse" id="basket-expand">
+        <div class="basket" lvl-drop-target="true" on-drop="dropped(dragEl, dropEl)">
+          <div class="basket-arrow">
+            <span class="glyphicon glyphicon-menu-up"></span>
+          </div>
+          <span class="glyphicon glyphicon-trash basket-icon"></span>
+          <!-- below we may show the last item dropped to basket -->
+          <!-- <br> -->
+          <!-- <span class="last-in-basket">{{ lastInBasket }}</span> -->
+        </div>
+      </a>
+      <div id="expand-basket" class="collapse basket-expanded no-transition">
+      <div class="basket-expanded-icon">
+        <span class="glyphicon glyphicon-trash basket-icon"></span>
+      </div>
+      <div>
+        <ul class="list-group">
+          <!-- external ng repeat to cycle through each type of drinks -->
+          <div ng-repeat="(drinkCategoryInsideBasket, categoryDataInsideBasket) in insideBasket">
+            <!-- internal ng-repeat cycles through each item in wines, whiskeys etc.-->
+            <li ng-repeat="itemInsideBasket in categoryDataInsideBasket track by $index" class="list-group-item drinks-list-item-inbasket">
+              <div class="row row-eq-height">
+                <div class="col-sm-9">
+                  <span> {{ drinkCategoryInsideBasket }} : </span>
+                  <span>
+                    <strong>{{ itemInsideBasket.brand | uppercase}}</strong>
+                    {{ itemInsideBasket.name }}
+                    {{ itemInsideBasket.vintage }}
+                  </span>
+                </div>
+                <div class="col-sm-3 text-right">
+                  <button class="btn btn-default btn-md item-restore" ng-click="restoreItem(drinkCategoryInsideBasket, $index)">
+                    <span class="glyphicon glyphicon-share"></span> restore
+                  </button>
+                </div>
+              </div>
+            </li>
+          </div>
+        </ul>
+      </div>
     </div>
+    <div>
 
-    <!-- Modules -->
+    <!-- jQuery scripts -->
+    <script src="js/basket-control.js"></script>
+
+    <!-- AngularJS Modules -->
     <script src="js/app.js"></script>
 
-    <!-- Controllers -->
+    <!-- AngularJS Controllers -->
     <script src="js/controllers/MainController.js"></script>
+    <script src="js/controllers/BasketController.js"></script>
 
-    <!-- Services -->
+    <!-- AngularJS Directives -->
+    <script src="js/directives/lvlDragDrop.js"></script>
+
+    <!-- AngularJS Services -->
+    <script src="js/services/uuid.js"></script>
+    <script src="js/services/itemExchange.js"></script>
 
   </body>
 </html>
