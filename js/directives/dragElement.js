@@ -1,6 +1,6 @@
 app.directive("dragMe", function() {
   return {
-    restrict: "A";
+    restrict: "A",
     scope:
     template:
   }
